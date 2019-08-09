@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_NovoAtivo"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_novo" />
+        <item
+            android:id="@+id/nav_ListaAtivos"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_lista" />
+        <item
+            android:id="@+id/nav_Localizar"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_buscaAvancada" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/menu_tools" />
+    </group>
+</menu>
