@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.ActivityBusca"
+    tools:showIn="@layout/app_bar_activity_busca"
+    android:orientation="vertical">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Escolha o parâmetro de busca:"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/checkBoxPatrimonio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Patrimônio" />
+
+        <CheckBox
+            android:id="@+id/checkBoxNumeroSerie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nº de Série" />
+
+        <CheckBox
+            android:id="@+id/checkBoxServiceTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service Tag" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/txtBuscaID"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buscar"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/labelID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:text="teste"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/labelItem"
+        android:textSize="30px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="teste"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+
+</LinearLayout>

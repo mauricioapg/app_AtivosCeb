@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ativosceb">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.ActivityListaTodosAtivos"
-            android:label="@string/title_activity_lista_todos_ativos"
+            android:name=".activities.ActivityDetalhesAtivos"
+            android:label="@string/title_activity_detalhes_ativos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.ActivityAtivosCategoria"
+            android:label="@string/title_activity_ativos_categoria"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ActivityBusca"
+            android:label="@string/title_activity_teste"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ActivityTodosAtivos"
+            android:label="@string/title_activity_todos_ativos"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ActivityNovoAtivo"
             android:label="@string/title_activity_novo_ativo"

@@ -15,7 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.example.ativosceb.activities.ActivityAtivosCategoria;
+import com.example.ativosceb.activities.ActivityBusca;
 import com.example.ativosceb.activities.ActivityListaAtivos;
+import com.example.ativosceb.activities.ActivityNovoAtivo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -82,12 +85,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_NovoAtivo) {
-            // Handle the camera action
+            Intent intent = new Intent(MainActivity.this, ActivityNovoAtivo.class);
+            startActivity(intent);
         } else if (id == R.id.nav_ListaAtivos) {
             Intent intent = new Intent(MainActivity.this, ActivityListaAtivos.class);
             startActivity(intent);
         } else if (id == R.id.nav_Localizar) {
-
+            Intent intent = new Intent(MainActivity.this, ActivityBusca.class);
+            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         }

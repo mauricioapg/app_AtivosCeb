@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activities.ActivityDetalhesAtivos"
+    tools:showIn="@layout/app_bar_activity_detalhes_ativos"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            android:text="ID: "/>
+
+        <TextView
+            android:id="@+id/labelIdAtivo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Item: "/>
+
+        <EditText
+            android:id="@+id/txtItem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Local: "/>
+
+        <Spinner
+            android:id="@+id/spinnerLocal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Fabricante: "/>
+
+        <Spinner
+            android:id="@+id/spinnerFabricante"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Categoria: "/>
+
+        <Spinner
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Piso: "/>
+        <Spinner
+            android:id="@+id/spinnerPiso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></Spinner>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Modelo: "/>
+
+        <EditText
+            android:id="@+id/txtModelo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Data de Registro: "/>
+
+        <EditText
+            android:id="@+id/txtDataRegistro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Data de Retirada: "/>
+
+        <EditText
+            android:id="@+id/txtDataRetirada"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Valor: "/>
+
+        <EditText
+            android:id="@+id/txtValor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Condição: "/>
+
+        <TextView
+            android:id="@+id/labelCondicao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:text="condição"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="ServiceTag: "/>
+
+        <EditText
+            android:id="@+id/txtServiceTag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Patrimônio: "/>
+
+        <EditText
+            android:id="@+id/txtPatrimonio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Garantia: "/>
+
+        <EditText
+            android:id="@+id/txtGarantia"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Nº de Série: "/>
+
+        <EditText
+            android:id="@+id/txtNumeroSerie"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="10dp"
+            android:text="Nota Fiscal: "/>
+
+        <EditText
+            android:id="@+id/txtNotaFiscal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</LinearLayout>

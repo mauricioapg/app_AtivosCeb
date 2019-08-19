@@ -88,7 +88,8 @@ public class ActivityNovoAtivo extends AppCompatActivity
             Intent intent = new Intent(ActivityNovoAtivo.this, ActivityNovoAtivo.class);
             startActivity(intent);
         } else if (id == R.id.nav_Localizar) {
-
+            Intent intent = new Intent(ActivityNovoAtivo.this, ActivityBusca.class);
+            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         }

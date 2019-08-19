@@ -63,7 +63,7 @@ public class ActivityListaAtivos extends AppCompatActivity
         btnTodosAtivos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivityListaAtivos.this, ActivityListaTodosAtivos.class);
+                Intent intent = new Intent(ActivityListaAtivos.this, ActivityTodosAtivos.class);
                 startActivity(intent);
             }
         });
@@ -73,7 +73,8 @@ public class ActivityListaAtivos extends AppCompatActivity
         btnPorCategoria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ActivityListaAtivos.this, ActivityAtivosCategoria.class);
+                startActivity(intent);
             }
         });
     }
@@ -141,7 +142,8 @@ public class ActivityListaAtivos extends AppCompatActivity
             Intent intent = new Intent(ActivityListaAtivos.this, ActivityListaAtivos.class);
             startActivity(intent);
         } else if (id == R.id.nav_Localizar) {
-
+            Intent intent = new Intent(ActivityListaAtivos.this, ActivityBusca.class);
+            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         }

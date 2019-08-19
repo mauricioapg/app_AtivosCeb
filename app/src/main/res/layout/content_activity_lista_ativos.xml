@@ -17,21 +17,25 @@
         android:id="@+id/btnTodosAtivos"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:text="Todos"/>
+        android:text="Todos"
+        android:textSize="25dp"/>
     <Button
         android:id="@+id/btnPorCategoria"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:text="Por categoria"/>
+        android:text="Por categoria"
+        android:textSize="25dp"/>
     <Button
         android:id="@+id/btnPorFabricante"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:text="Por fabricante"/>
+        android:text="Por fabricante"
+        android:textSize="25dp"/>
     <Button
         android:id="@+id/btnPorLocal"
         android:layout_width="fill_parent"
         android:layout_height="100dp"
-        android:text="Por local"/>
+        android:text="Por local"
+        android:textSize="25dp"/>
 
 </LinearLayout>

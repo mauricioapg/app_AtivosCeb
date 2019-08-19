@@ -8,10 +8,10 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_novo">Novo Ativo</string>
-    <string name="menu_lista">Lista de Ativos</string>
+    <string name="menu_lista">Listas de Ativos</string>
     <string name="menu_buscaAvancada">Busca Avançada</string>
     <string name="menu_tools">Tools</string>
-    <string name="title_activity_lista_ativos">Lista de Ativos</string>
+    <string name="title_activity_lista_ativos">Listas de Ativos</string>
     <string name="title_activity_novo_ativo">Novo Ativo</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
@@ -20,4 +20,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="title_activity_todos_ativos">Todos os Ativos</string>
+    <string name="title_activity_teste">Busca avançada</string>
+    <string name="title_activity_ativos_categoria">Lista de Ativos</string>
+    <string name="title_activity_detalhes_ativos">Detalhes do Ativo</string>
 </resources>
