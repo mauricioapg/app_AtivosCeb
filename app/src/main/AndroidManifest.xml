@@ -13,9 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.ActivityDetalhesAtivos"
-            android:label="@string/title_activity_detalhes_ativos"
+            android:name=".activities.ActivityAtivosLocal"
+            android:label="@string/title_activity_ativos_local"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activities.ActivityAtivosFabricante"
+            android:label="@string/title_activity_ativos_fabricante"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ActivityDetalhesAtivos"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_detalhes_ativos"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ActivityAtivosCategoria"
             android:label="@string/title_activity_ativos_categoria"

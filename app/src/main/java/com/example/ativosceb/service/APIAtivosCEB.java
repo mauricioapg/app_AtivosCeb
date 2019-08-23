@@ -8,15 +8,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-public class APIAtivosCEB extends AsyncTask<Void, Void, Ativo>{
+public class APIAtivosCEB{
 
-    private final int id;
+    public static String urlPadrao = "http://webativos.gearhostpreview.com/api/";
 
-    public APIAtivosCEB(int id){
-        this.id  = id;
-    }
-
-    /*public Ativo buscarAtivo() throws JSONException, IOException, ExecutionException, InterruptedException {
+/*public Ativo buscarAtivo() throws JSONException, IOException, ExecutionException, InterruptedException {
         String resposta = this.execute().get();
         JSONObject obj = new JSONObject(resposta);
         int idAtivo = obj.getInt("idAtivo");
@@ -39,7 +35,7 @@ public class APIAtivosCEB extends AsyncTask<Void, Void, Ativo>{
         return new Ativo(idAtivo, item);
         //return new Ativo(idAtivo, item, idLocal, idCategoria, idPiso, idFabricante, modelo, comentarios, dataRetirada, dataRegistro, condicao, serviceTag,
         //        garantia, numeroSerie, notaFiscal, patrimonio, valor);
-    }*/
+    }
 
     @Override
     protected Ativo doInBackground(Void... voids) {
@@ -65,5 +61,5 @@ public class APIAtivosCEB extends AsyncTask<Void, Void, Ativo>{
         }
         Gson gson = new Gson();
         return gson.fromJson(resposta.toString(), Ativo.class);
-    }
+    }*/
 }

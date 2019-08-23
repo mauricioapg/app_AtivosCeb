@@ -24,4 +24,6 @@
     <string name="title_activity_teste">Busca avançada</string>
     <string name="title_activity_ativos_categoria">Lista de Ativos</string>
     <string name="title_activity_detalhes_ativos">Detalhes do Ativo</string>
+    <string name="title_activity_ativos_fabricante">Lista de Ativos</string>
+    <string name="title_activity_ativos_local">Lista de Ativos</string>
 </resources>

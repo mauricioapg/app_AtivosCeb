@@ -83,7 +83,8 @@ public class ActivityListaAtivos extends AppCompatActivity
         btnPorFabricante.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ActivityListaAtivos.this, ActivityAtivosFabricante.class);
+                startActivity(intent);
             }
         });
     }
@@ -92,7 +93,8 @@ public class ActivityListaAtivos extends AppCompatActivity
         btnPorLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ActivityListaAtivos.this, ActivityAtivosLocal.class);
+                startActivity(intent);
             }
         });
     }

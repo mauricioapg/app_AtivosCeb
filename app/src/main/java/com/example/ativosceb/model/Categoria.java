@@ -1,7 +1,5 @@
 package com.example.ativosceb.model;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Categoria {
 
     private int idCategoria;
@@ -30,6 +28,6 @@ public class Categoria {
 
     @Override
     public String toString() {
-        return descCategoria;
+        return getDescCategoria();
     }
 }

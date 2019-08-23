@@ -15,23 +15,37 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.ativosceb.R;
 import com.example.ativosceb.model.Ativo;
+import com.example.ativosceb.model.Categoria;
+import com.example.ativosceb.model.Fabricante;
+import com.example.ativosceb.model.Local;
+import com.example.ativosceb.model.Piso;
+import com.example.ativosceb.service.APIAtivosCEB;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 public class ActivityDetalhesAtivos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private TextView labelIdAtivo;
+    private Integer idAtivo;
     private EditText txtItem;
     private Spinner spinnerLocal;
     private Spinner spinnerFabricante;
@@ -48,6 +62,10 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
     private EditText txtPatrimonio;
     private EditText txtModelo;
     private EditText txtNotaFiscal;
+    private Integer idCategoriaSelecionada;
+    private Integer idFabricanteSelecionado;
+    private Integer idLocalSelecionado;
+    private Integer idPisoSelecionado;
 
 
     @Override
@@ -73,7 +91,6 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.labelCondicao = (TextView) findViewById(R.id.labelCondicao);
-        this.labelIdAtivo = (TextView) findViewById(R.id.labelIdAtivo);
         this.txtDataRegistro = (EditText) findViewById(R.id.txtDataRegistro);
         this.txtDataRetirada = (EditText) findViewById(R.id.txtDataRetirada);
         this.txtItem = (EditText) findViewById(R.id.txtItem);
@@ -89,6 +106,8 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         this.spinnerLocal = (Spinner) findViewById(R.id.spinnerLocal);
         this.spinnerPiso = (Spinner) findViewById(R.id.spinnerPiso);
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         try {
             this.carregarAtivo();
         } catch (ExecutionException e) {
@@ -98,10 +117,50 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
+    private class APIPisos extends AsyncTask<Void, Void, List<Piso>>{
+
+        @Override
+        protected List<Piso> doInBackground(Void... voids) {
+            List<Piso> lista = new ArrayList<>();
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "piso");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            try {
+                JSONArray array = new JSONArray(resposta.toString());
+                for(int i=0;i<array.length();i++)
+                {
+                    JSONObject object = array.getJSONObject(i);
+                    Piso piso = new Piso(object.optInt("idPiso"), object.optString("descPiso"));
+                    lista.add(piso);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lista;
+        }
+    }
+
     private void carregarAtivo() throws ExecutionException, InterruptedException {
         ActivityBusca activityBusca = new ActivityBusca();
         Ativo ativo = activityBusca.carregarAtivo();
-        this.labelIdAtivo.setText(String.valueOf(ativo.getIdAtivo()));
+        idAtivo = ativo.getIdAtivo();
         this.labelCondicao.setText(ativo.getCondicao());
         this.txtItem.setText(ativo.getItem());
         this.txtDataRetirada.setText(ativo.getDataRetirada());
@@ -114,6 +173,86 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         //this.txtPatrimonio.setText(ativo.getPatrimonio());
         this.txtNotaFiscal.setText(ativo.getNotaFiscal());
         this.txtItem.setText(ativo.getItem());
+        popularSpinnerCategorias();
+        popularSpinnerFabricantes();
+        popularSpinnerLocais();
+        popularSpinnerPisos();
+    }
+
+    private void popularSpinnerCategorias() throws ExecutionException, InterruptedException {
+        ActivityAtivosCategoria activityAtivosCategoria = new ActivityAtivosCategoria();
+        final ArrayAdapter<Categoria> adapterSpinner = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, activityAtivosCategoria.carregarCategorias());
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategoria.setAdapter(adapterSpinner);
+        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
+                idCategoriaSelecionada = categoria.getIdCategoria();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void popularSpinnerFabricantes() throws ExecutionException, InterruptedException {
+        ActivityAtivosFabricante activityAtivosFabricante = new ActivityAtivosFabricante();
+        final ArrayAdapter<Fabricante> adapterSpinner = new ArrayAdapter<Fabricante>(this, android.R.layout.simple_spinner_item, activityAtivosFabricante.carregarFabricantes());
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFabricante.setAdapter(adapterSpinner);
+        spinnerFabricante.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
+                idFabricanteSelecionado = fabricante.getIdFabricante();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void popularSpinnerLocais() throws ExecutionException, InterruptedException {
+        ActivityAtivosLocal activityAtivosLocal = new ActivityAtivosLocal();
+        final ArrayAdapter<Local> adapterSpinner = new ArrayAdapter<Local>(this, android.R.layout.simple_spinner_item, activityAtivosLocal.carregarLocais());
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLocal.setAdapter(adapterSpinner);
+        spinnerLocal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Local local = (Local) adapterView.getItemAtPosition(i);
+                idLocalSelecionado = local.getIdLocal();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void popularSpinnerPisos() throws ExecutionException, InterruptedException {
+        APIPisos api = new APIPisos();
+        final ArrayAdapter<Piso> adapterSpinner = new ArrayAdapter<Piso>(this, android.R.layout.simple_spinner_item, api.execute().get());
+        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPiso.setAdapter(adapterSpinner);
+        spinnerPiso.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Piso piso = (Piso) adapterView.getItemAtPosition(i);
+                idPisoSelecionado = piso.getIdPiso();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     @Override

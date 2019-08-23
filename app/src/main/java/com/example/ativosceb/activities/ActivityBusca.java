@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.ativosceb.R;
 import com.example.ativosceb.model.Ativo;
+import com.example.ativosceb.service.APIAtivosCEB;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -32,6 +33,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -39,8 +42,6 @@ public class ActivityBusca extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Button btnBuscar;
-    private TextView labelID;
-    private TextView labelItem;
     public static EditText txtBusca;
     private CheckBox checkBoxPatrimonio;
     private CheckBox checkBoxNumeroSerie;
@@ -70,8 +71,6 @@ public class ActivityBusca extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.btnBuscar = (Button) findViewById(R.id.btnBuscar);
-        this.labelID = (TextView) findViewById(R.id.labelID);
-        this.labelItem = (TextView) findViewById(R.id.labelItem);
         this.txtBusca = (EditText) findViewById(R.id.txtBuscaID);
         this.checkBoxNumeroSerie = (CheckBox) findViewById(R.id.checkBoxNumeroSerie);
         this.checkBoxPatrimonio = (CheckBox) findViewById(R.id.checkBoxPatrimonio);
@@ -79,8 +78,6 @@ public class ActivityBusca extends AppCompatActivity
 
         this.txtBusca.setVisibility(View.INVISIBLE);
         this.btnBuscar.setVisibility(View.INVISIBLE);
-        this.labelID.setVisibility(View.INVISIBLE);
-        this.labelItem.setVisibility(View.INVISIBLE);
 
         this.ClickBotaoBuscarListener();
         this.ClickCheckBoxPatrimonio();
@@ -109,7 +106,7 @@ public class ActivityBusca extends AppCompatActivity
                     txtBusca.setVisibility(View.VISIBLE);
                     btnBuscar.setVisibility(View.VISIBLE);
                     txtBusca.setHint("Digite o patrimônio");
-                    urlBusca = "http://webativos.gearhostpreview.com/api/ativo?patrimonio=";
+                    urlBusca = APIAtivosCEB.urlPadrao + "ativo?patrimonio=";
                 }
                 else {
                     checkBoxNumeroSerie.setEnabled(true);
@@ -131,7 +128,7 @@ public class ActivityBusca extends AppCompatActivity
                     txtBusca.setVisibility(View.VISIBLE);
                     btnBuscar.setVisibility(View.VISIBLE);
                     txtBusca.setHint("Digite o número de série");
-                    urlBusca = "http://webativos.gearhostpreview.com/api/ativo?numeroSerie=";
+                    urlBusca = APIAtivosCEB.urlPadrao + "ativo?numeroSerie=";
                 }
                 else {
                     checkBoxPatrimonio.setEnabled(true);
@@ -153,7 +150,7 @@ public class ActivityBusca extends AppCompatActivity
                     txtBusca.setVisibility(View.VISIBLE);
                     btnBuscar.setVisibility(View.VISIBLE);
                     txtBusca.setHint("Digite a service tag");
-                    urlBusca = "http://webativos.gearhostpreview.com/api/ativo?serviceTag=";
+                    urlBusca = APIAtivosCEB.urlPadrao + "ativo?serviceTag=";
                 }
                 else {
                     checkBoxNumeroSerie.setEnabled(true);
@@ -182,7 +179,7 @@ public class ActivityBusca extends AppCompatActivity
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
-                URL url = new URL(ActivityBusca.urlBusca + ActivityBusca.txtBusca.getText());
+                URL url = new URL(ActivityBusca.urlBusca + String.valueOf(ActivityBusca.txtBusca.getText()));
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");

@@ -18,15 +18,11 @@ import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.ativosceb.R;
-import com.example.ativosceb.model.Ativo;
-import com.example.ativosceb.model.Categoria;
+import com.example.ativosceb.model.Fabricante;
+import com.example.ativosceb.model.Local;
 import com.example.ativosceb.service.APIAtivosCEB;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,17 +35,17 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
-public class ActivityAtivosCategoria extends AppCompatActivity
+public class ActivityAtivosLocal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Categoria> listaCategorias = new ArrayList<>();;
-    private Spinner spinnerCategorias;
-    private Integer idCategoriaSelecionada;
+    private List<Local> listaLocais = new ArrayList<>();;
+    private Spinner spinnerLocais;
+    private Integer idLocalSelecionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ativos_categoria);
+        setContentView(R.layout.activity_ativos_local);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -68,7 +64,7 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        this.spinnerCategorias = (Spinner) findViewById(R.id.spinnerCategorias);
+        this.spinnerLocais = (Spinner) findViewById(R.id.spinnerLocais);
 
         try {
             popularSpinner();
@@ -79,15 +75,15 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         }
     }
 
-    private class API extends AsyncTask<Void, Void, List<Categoria>>{
+    private class API extends AsyncTask<Void, Void, List<Local>>{
 
         @Override
-        protected List<Categoria> doInBackground(Void... voids) {
-            List<Categoria> lista = new ArrayList<>();
+        protected List<Local> doInBackground(Void... voids) {
+            List<Local> lista = new ArrayList<>();
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
-                URL url = new URL(APIAtivosCEB.urlPadrao + "categoria");
+                URL url = new URL(APIAtivosCEB.urlPadrao + "local");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");
@@ -109,8 +105,8 @@ public class ActivityAtivosCategoria extends AppCompatActivity
                 for(int i=0;i<array.length();i++)
                 {
                     JSONObject object = array.getJSONObject(i);
-                    Categoria categoria = new Categoria(object.optInt("idCategoria"), object.optString("descCategoria"));
-                    lista.add(categoria);
+                    Local local = new Local(object.optInt("idLocal"), object.optString("descLocal"));
+                    lista.add(local);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -119,22 +115,21 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         }
     }
 
-    public List<Categoria> carregarCategorias() throws ExecutionException, InterruptedException {
+    public List<Local> carregarLocais() throws ExecutionException, InterruptedException {
         API api = new API();
-        listaCategorias = api.execute().get();
-        return listaCategorias;
+        listaLocais = api.execute().get();
+        return listaLocais;
     }
 
     private void popularSpinner() throws ExecutionException, InterruptedException {
-        final ArrayAdapter<Categoria> adapterSpinner = new ArrayAdapter<Categoria>(ActivityAtivosCategoria.this, android.R.layout.simple_spinner_item, carregarCategorias());
+        final ArrayAdapter<Local> adapterSpinner = new ArrayAdapter<Local>(ActivityAtivosLocal.this, android.R.layout.simple_spinner_item, carregarLocais());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategorias.setAdapter(adapterSpinner);
-        spinnerCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerLocais.setAdapter(adapterSpinner);
+        spinnerLocais.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
-                idCategoriaSelecionada = categoria.getIdCategoria();
-                //Toast.makeText(view.getContext(), "ID: " + categoria.getIdCategoria(), Toast.LENGTH_LONG).show();
+                Local local = (Local) adapterView.getItemAtPosition(i);
+                idLocalSelecionado = local.getIdLocal();
             }
 
             @Override
@@ -143,7 +138,6 @@ public class ActivityAtivosCategoria extends AppCompatActivity
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {
@@ -158,7 +152,7 @@ public class ActivityAtivosCategoria extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_ativos_categoria, menu);
+        getMenuInflater().inflate(R.menu.activity_ativos_local, menu);
         return true;
     }
 
@@ -184,13 +178,13 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_NovoAtivo) {
-            Intent intent = new Intent(ActivityAtivosCategoria.this, ActivityNovoAtivo.class);
+            Intent intent = new Intent(ActivityAtivosLocal.this, ActivityNovoAtivo.class);
             startActivity(intent);
         } else if (id == R.id.nav_ListaAtivos) {
-            Intent intent = new Intent(ActivityAtivosCategoria.this, ActivityListaAtivos.class);
+            Intent intent = new Intent(ActivityAtivosLocal.this, ActivityListaAtivos.class);
             startActivity(intent);
         } else if (id == R.id.nav_Localizar) {
-            Intent intent = new Intent(ActivityAtivosCategoria.this, ActivityBusca.class);
+            Intent intent = new Intent(ActivityAtivosLocal.this, ActivityBusca.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_tools) {
