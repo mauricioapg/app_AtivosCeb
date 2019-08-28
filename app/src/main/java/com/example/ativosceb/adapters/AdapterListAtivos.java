@@ -1,7 +1,6 @@
 package com.example.ativosceb.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -42,8 +41,8 @@ public class AdapterListAtivos extends BaseAdapter {
         View view = View.inflate(this.context, R.layout.layout_ativos, null);
         TextView id = (TextView) view.findViewById(R.id.labelID);
         TextView item = (TextView) view.findViewById(R.id.labelItem);
-        id.setText("Teste ID");
-        item.setText("Teste nome do equipamento");
+        id.setText(String.valueOf(listaAtivos.get(i).getIdAtivo()));
+        item.setText(listaAtivos.get(i).getItem());
 
         return view;
     }

@@ -166,6 +166,7 @@ public class ActivityBusca extends AppCompatActivity
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ActivityDetalhesAtivos.telaOrigem = "telaBusca";
                 Intent intent = new Intent(ActivityBusca.this, ActivityDetalhesAtivos.class);
                 startActivity(intent);
             }

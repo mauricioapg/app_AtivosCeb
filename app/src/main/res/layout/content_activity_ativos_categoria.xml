@@ -23,10 +23,36 @@
         android:layout_width="match_parent"
         android:layout_height="3dp" />
 
-    <Spinner
-        android:id="@+id/spinnerCategorias"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </Spinner>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinnerCategorias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Spinner>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+        <Button
+            android:id="@+id/btnBuscarAtivosCategoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buscar"/>
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/ListViewAtivosCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
 </LinearLayout>

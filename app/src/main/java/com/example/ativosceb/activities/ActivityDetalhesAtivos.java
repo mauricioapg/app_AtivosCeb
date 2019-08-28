@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ativosceb.R;
 import com.example.ativosceb.model.Ativo;
@@ -66,6 +67,8 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
     private Integer idFabricanteSelecionado;
     private Integer idLocalSelecionado;
     private Integer idPisoSelecionado;
+    public static int idAtivoClicadoLista;
+    public static String telaOrigem;
 
 
     @Override
@@ -109,11 +112,45 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         try {
-            this.carregarAtivo();
+            if(telaOrigem == "telaBusca"){
+                this.carregarAtivoBusca();
+            }
+            else if(telaOrigem == "telaLista"){
+                this.carregarAtivoLista();
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class APIAtivoObtido extends AsyncTask<Void, Void, Ativo>{
+
+        @Override
+        protected Ativo doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "ativo/" + idAtivoClicadoLista);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(resposta.toString(), Ativo.class);
         }
     }
 
@@ -156,8 +193,30 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
             return lista;
         }
     }
+    
+    private void carregarAtivoLista() throws ExecutionException, InterruptedException {
+        APIAtivoObtido api = new APIAtivoObtido();
+        Ativo ativo = api.execute().get();
+        idAtivo = ativo.getIdAtivo();
+        this.labelCondicao.setText(ativo.getCondicao());
+        this.txtItem.setText(ativo.getItem());
+        this.txtDataRetirada.setText(ativo.getDataRetirada());
+        this.txtDataRegistro.setText(ativo.getDataRegistro());
+        this.txtModelo.setText(ativo.getModelo());
+        this.txtValor.setText(String.valueOf(ativo.getValor()));
+        this.txtGarantia.setText(ativo.getGarantia());
+        this.txtNumeroSerie.setText(ativo.getNumeroSerie());
+        this.txtServiceTag.setText(ativo.getServiceTag());
+        this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
+        this.txtNotaFiscal.setText(ativo.getNotaFiscal());
+        this.txtItem.setText(ativo.getItem());
+        popularSpinnerCategorias();
+        popularSpinnerFabricantes();
+        popularSpinnerLocais();
+        popularSpinnerPisos();
+    }
 
-    private void carregarAtivo() throws ExecutionException, InterruptedException {
+    private void carregarAtivoBusca() throws ExecutionException, InterruptedException {
         ActivityBusca activityBusca = new ActivityBusca();
         Ativo ativo = activityBusca.carregarAtivo();
         idAtivo = ativo.getIdAtivo();
@@ -170,7 +229,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         this.txtGarantia.setText(ativo.getGarantia());
         this.txtNumeroSerie.setText(ativo.getNumeroSerie());
         this.txtServiceTag.setText(ativo.getServiceTag());
-        //this.txtPatrimonio.setText(ativo.getPatrimonio());
+        this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
         this.txtNotaFiscal.setText(ativo.getNotaFiscal());
         this.txtItem.setText(ativo.getItem());
         popularSpinnerCategorias();
@@ -189,6 +248,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
                 idCategoriaSelecionada = categoria.getIdCategoria();
+                //Toast.makeText(view.getContext(), "ID: " + categoria.getIdCategoria(), Toast.LENGTH_LONG).show();
             }
 
             @Override

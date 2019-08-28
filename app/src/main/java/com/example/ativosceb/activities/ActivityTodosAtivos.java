@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.example.ativosceb.service.APIAtivosCEB;
 import com.example.ativosceb.R;
 import com.example.ativosceb.adapters.AdapterListAtivos;
 import com.example.ativosceb.model.Ativo;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +46,6 @@ import java.util.concurrent.ExecutionException;
 
 public class ActivityTodosAtivos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private TextView labelIdAtivo;
-    private TextView labelItem;
     private ListView listViewTodosAtivos;
     private List<Ativo> listaAtivos = new ArrayList<>();
     private AdapterListAtivos adapterListaAtivos;
@@ -96,7 +96,7 @@ public class ActivityTodosAtivos extends AppCompatActivity
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
-                URL url = new URL("http://webativos.gearhostpreview.com/api/ativo");
+                URL url = new URL(APIAtivosCEB.urlPadrao + "ativo");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");
@@ -134,6 +134,16 @@ public class ActivityTodosAtivos extends AppCompatActivity
         this.listViewTodosAtivos = (ListView) findViewById(R.id.ListViewTodosAtivos);
         this.adapterListaAtivos = new AdapterListAtivos(ActivityTodosAtivos.this, this.listaAtivos);
         this.listViewTodosAtivos.setAdapter(this.adapterListaAtivos);
+        this.listViewTodosAtivos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView labelID = (TextView) view.findViewById(R.id.labelID);
+                ActivityDetalhesAtivos.idAtivoClicadoLista = Integer.parseInt(labelID.getText().toString());
+                ActivityDetalhesAtivos.telaOrigem = "telaLista";
+                Intent intent = new Intent(ActivityTodosAtivos.this, ActivityDetalhesAtivos.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void onRequestPermissionResult(int requestCode, String permissions[], int [] granResults) throws JSONException, IOException, ExecutionException, InterruptedException {

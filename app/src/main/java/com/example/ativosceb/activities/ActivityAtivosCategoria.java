@@ -17,10 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ativosceb.R;
+import com.example.ativosceb.adapters.AdapterListAtivos;
 import com.example.ativosceb.model.Ativo;
 import com.example.ativosceb.model.Categoria;
 import com.example.ativosceb.service.APIAtivosCEB;
@@ -32,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +49,11 @@ public class ActivityAtivosCategoria extends AppCompatActivity
 
     private List<Categoria> listaCategorias = new ArrayList<>();;
     private Spinner spinnerCategorias;
+    private ListView listViewAtivosCategoria;
+    private List<Ativo> listaAtivosCategoria = new ArrayList<>();
+    private AdapterListAtivos adapterListaAtivosCategoria;
     private Integer idCategoriaSelecionada;
+    private Button btnBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +78,9 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.spinnerCategorias = (Spinner) findViewById(R.id.spinnerCategorias);
+        this.btnBuscar = (Button) findViewById(R.id.btnBuscarAtivosCategoria);
+
+        ClickBotaoBuscarAtivos();
 
         try {
             popularSpinner();
@@ -79,7 +91,47 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         }
     }
 
-    private class API extends AsyncTask<Void, Void, List<Categoria>>{
+    private class APIAtivosPorCategoria extends AsyncTask<Void, Void, List<Ativo>>{
+
+        @Override
+        protected List<Ativo> doInBackground(Void... voids) {
+            List<Ativo> lista = new ArrayList<>();
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "ativo?idCategoria=" + idCategoriaSelecionada);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            try {
+                JSONArray array = new JSONArray(resposta.toString());
+                for(int i=0;i<array.length();i++)
+                {
+                    JSONObject object = array.getJSONObject(i);
+                    Ativo ativo = new Ativo(object.optInt("idAtivo"), object.optString("item"));
+                    lista.add(ativo);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lista;
+        }
+    }
+
+    private class APICategoria extends AsyncTask<Void, Void, List<Categoria>>{
 
         @Override
         protected List<Categoria> doInBackground(Void... voids) {
@@ -119,8 +171,45 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         }
     }
 
+    private void ClickBotaoBuscarAtivos(){
+        this.btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    carregarAtivosPorCategoria();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void carregarAtivosPorCategoria() throws JSONException, IOException, ExecutionException, InterruptedException {
+        APIAtivosPorCategoria api = new APIAtivosPorCategoria();
+        this.listaAtivosCategoria = api.execute().get();
+        this.listViewAtivosCategoria = (ListView) findViewById(R.id.ListViewAtivosCategoria);
+        this.adapterListaAtivosCategoria = new AdapterListAtivos(ActivityAtivosCategoria.this, this.listaAtivosCategoria);
+        this.listViewAtivosCategoria.setAdapter(adapterListaAtivosCategoria);
+        this.listViewAtivosCategoria.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView labelID = (TextView) view.findViewById(R.id.labelID);
+                ActivityDetalhesAtivos.idAtivoClicadoLista = Integer.parseInt(labelID.getText().toString());
+                ActivityDetalhesAtivos.telaOrigem = "telaLista";
+                Intent intent = new Intent(ActivityAtivosCategoria.this, ActivityDetalhesAtivos.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     public List<Categoria> carregarCategorias() throws ExecutionException, InterruptedException {
-        API api = new API();
+        APICategoria api = new APICategoria();
         listaCategorias = api.execute().get();
         return listaCategorias;
     }
