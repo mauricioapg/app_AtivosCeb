@@ -17,9 +17,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.ativosceb.R;
+import com.example.ativosceb.adapters.AdapterListAtivos;
+import com.example.ativosceb.model.Ativo;
 import com.example.ativosceb.model.Categoria;
 import com.example.ativosceb.model.Fabricante;
 import com.example.ativosceb.service.APIAtivosCEB;
@@ -28,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,7 +46,11 @@ public class ActivityAtivosFabricante extends AppCompatActivity
 
     private List<Fabricante> listaFabricantes = new ArrayList<>();;
     private Spinner spinnerFabricantes;
+    private ListView listViewAtivosFabricante;
+    private List<Ativo> listaAtivosFabricante = new ArrayList<>();
+    private AdapterListAtivos adapterListaAtivosFabricante;
     private Integer idFabricanteSelecionado;
+    private Button btnBuscar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +75,9 @@ public class ActivityAtivosFabricante extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         this.spinnerFabricantes = (Spinner) findViewById(R.id.spinnerFabricantes);
+        this.btnBuscar = (Button) findViewById(R.id.btnBuscarAtivosFabricante);
+
+        ClickBotaoBuscarAtivos();
 
         try {
             popularSpinner();
@@ -75,7 +88,47 @@ public class ActivityAtivosFabricante extends AppCompatActivity
         }
     }
 
-    private class API extends AsyncTask<Void, Void, List<Fabricante>>{
+    private class APIAtivosPorFabricante extends AsyncTask<Void, Void, List<Ativo>>{
+
+        @Override
+        protected List<Ativo> doInBackground(Void... voids) {
+            List<Ativo> lista = new ArrayList<>();
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "ativo?idFabricante=" + idFabricanteSelecionado);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            try {
+                JSONArray array = new JSONArray(resposta.toString());
+                for(int i=0;i<array.length();i++)
+                {
+                    JSONObject object = array.getJSONObject(i);
+                    Ativo ativo = new Ativo(object.optInt("idAtivo"), object.optString("item"));
+                    lista.add(ativo);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return lista;
+        }
+    }
+
+    private class APIFabricante extends AsyncTask<Void, Void, List<Fabricante>>{
 
         @Override
         protected List<Fabricante> doInBackground(Void... voids) {
@@ -115,8 +168,45 @@ public class ActivityAtivosFabricante extends AppCompatActivity
         }
     }
 
+    private void ClickBotaoBuscarAtivos(){
+        this.btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    carregarAtivosPorFabricante();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void carregarAtivosPorFabricante() throws JSONException, IOException, ExecutionException, InterruptedException {
+        ActivityAtivosFabricante.APIAtivosPorFabricante api = new ActivityAtivosFabricante.APIAtivosPorFabricante();
+        this.listaAtivosFabricante = api.execute().get();
+        this.listViewAtivosFabricante = (ListView) findViewById(R.id.ListViewAtivosFabricante);
+        this.adapterListaAtivosFabricante = new AdapterListAtivos(ActivityAtivosFabricante.this, this.listaAtivosFabricante);
+        this.listViewAtivosFabricante.setAdapter(adapterListaAtivosFabricante);
+        this.listViewAtivosFabricante.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView labelID = (TextView) view.findViewById(R.id.labelID);
+                ActivityDetalhesAtivos.idAtivoClicadoLista = Integer.parseInt(labelID.getText().toString());
+                ActivityDetalhesAtivos.telaOrigem = "telaLista";
+                Intent intent = new Intent(ActivityAtivosFabricante.this, ActivityDetalhesAtivos.class);
+                startActivity(intent);
+            }
+        });
+    }
+
     public List<Fabricante> carregarFabricantes() throws ExecutionException, InterruptedException {
-        API api = new API();
+        APIFabricante api = new APIFabricante();
         listaFabricantes = api.execute().get();
         return listaFabricantes;
     }
