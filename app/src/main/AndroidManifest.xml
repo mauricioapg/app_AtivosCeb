@@ -13,9 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activities.ActivityEditarAtivo"
+            android:label="@string/title_activity_editar_ativo"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".activities.ActivityAtivosLocal"
             android:label="@string/title_activity_ativos_local"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ActivityAtivosFabricante"
             android:label="@string/title_activity_ativos_fabricante"

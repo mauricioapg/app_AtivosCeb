@@ -16,30 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ativosceb.R;
 import com.example.ativosceb.model.Ativo;
-import com.example.ativosceb.model.Categoria;
-import com.example.ativosceb.model.Fabricante;
-import com.example.ativosceb.model.Local;
-import com.example.ativosceb.model.Piso;
 import com.example.ativosceb.service.APIAtivosCEB;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -47,22 +33,23 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Integer idAtivo;
-    private EditText txtItem;
-    private Spinner spinnerLocal;
-    private Spinner spinnerFabricante;
-    private Spinner spinnerCategoria;
-    private Spinner spinnerPiso;
-    private EditText txtComentarios;
-    private EditText txtDataRetirada;
-    private EditText txtDataRegistro;
+    private TextView labelItem;
+    private TextView labelLocal;
+    private TextView labelFabricante;
+    private TextView labelCategoria;
+    private TextView labelPiso;
+    private TextView labelComentarios;
+    private TextView labelDataRetirada;
+    private TextView labelDataRegistro;
     private TextView labelCondicao;
-    private EditText txtValor;
-    private EditText txtGarantia;
-    private EditText txtNumeroSerie;
-    private EditText txtServiceTag;
-    private EditText txtPatrimonio;
-    private EditText txtModelo;
-    private EditText txtNotaFiscal;
+    private TextView labelValor;
+    private TextView labelGarantia;
+    private TextView labelNumeroSerie;
+    private TextView labelServiceTag;
+    private TextView labelPatrimonio;
+    private TextView labelModelo;
+    private TextView labelNotaFiscal;
+    private MenuItem menuEditar;
     private Integer idCategoriaSelecionada;
     private Integer idFabricanteSelecionado;
     private Integer idLocalSelecionado;
@@ -93,21 +80,22 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        this.labelCondicao = (TextView) findViewById(R.id.labelCondicao);
-        this.txtDataRegistro = (EditText) findViewById(R.id.txtDataRegistro);
-        this.txtDataRetirada = (EditText) findViewById(R.id.txtDataRetirada);
-        this.txtItem = (EditText) findViewById(R.id.txtItem);
-        this.txtValor = (EditText) findViewById(R.id.txtValor);
-        this.txtGarantia = (EditText) findViewById(R.id.txtGarantia);
-        this.txtNumeroSerie = (EditText) findViewById(R.id.txtNumeroSerie);
-        this.txtServiceTag = (EditText) findViewById(R.id.txtServiceTag);
-        this.txtPatrimonio = (EditText) findViewById(R.id.txtPatrimonio);
-        this.txtModelo = (EditText) findViewById(R.id.txtModelo);
-        this.txtNotaFiscal = (EditText) findViewById(R.id.txtNotaFiscal);
-        this.spinnerCategoria = (Spinner) findViewById(R.id.spinnerCategoria);
-        this.spinnerFabricante = (Spinner) findViewById(R.id.spinnerFabricante);
-        this.spinnerLocal = (Spinner) findViewById(R.id.spinnerLocal);
-        this.spinnerPiso = (Spinner) findViewById(R.id.spinnerPiso);
+        this.setLabelCondicao((TextView) findViewById(R.id.labelCondicao));
+        this.setLabelDataRegistro((TextView) findViewById(R.id.labelDataRegistro));
+        this.setLabelDataRetirada((TextView) findViewById(R.id.labelDataRetirada));
+        this.setLabelItem((TextView) findViewById(R.id.labelItem));
+        this.setLabelValor((TextView) findViewById(R.id.labelValor));
+        this.setLabelGarantia((TextView) findViewById(R.id.labelGarantia));
+        this.setLabelNumeroSerie((TextView) findViewById(R.id.labelNumeroSerie));
+        this.setLabelServiceTag((TextView) findViewById(R.id.labelServiceTag));
+        this.setLabelPatrimonio((TextView) findViewById(R.id.labelPatrimonio));
+        this.setLabelModelo((TextView) findViewById(R.id.labelModelo));
+        this.setLabelNotaFiscal((TextView) findViewById(R.id.labelNotaFiscal));
+        this.setLabelCategoria((TextView) findViewById(R.id.labelCategoria));
+        this.setLabelFabricante((TextView) findViewById(R.id.labelFabricante));
+        this.setLabelLocal((TextView) findViewById(R.id.labelLocal));
+        this.setLabelPiso((TextView) findViewById(R.id.labelPiso));
+        this.menuEditar = (MenuItem) findViewById(R.id.menuEditar);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -154,166 +142,184 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
-    private class APIPisos extends AsyncTask<Void, Void, List<Piso>>{
-
-        @Override
-        protected List<Piso> doInBackground(Void... voids) {
-            List<Piso> lista = new ArrayList<>();
-            HttpURLConnection urlConnection = null;
-            StringBuilder resposta = new StringBuilder();
-            try {
-                URL url = new URL(APIAtivosCEB.urlPadrao + "piso");
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.connect();
-
-                Scanner scanner = new Scanner(url.openStream());
-                while ((scanner.hasNext())) {
-                    resposta.append(scanner.next() + " ");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-            }
-            try {
-                JSONArray array = new JSONArray(resposta.toString());
-                for(int i=0;i<array.length();i++)
-                {
-                    JSONObject object = array.getJSONObject(i);
-                    Piso piso = new Piso(object.optInt("idPiso"), object.optString("descPiso"));
-                    lista.add(piso);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return lista;
-        }
+    public Ativo obterAtivo() throws ExecutionException, InterruptedException {
+        APIAtivoObtido api = new APIAtivoObtido();
+        Ativo ativo = api.execute().get();
+        return ativo;
     }
     
     private void carregarAtivoLista() throws ExecutionException, InterruptedException {
         APIAtivoObtido api = new APIAtivoObtido();
         Ativo ativo = api.execute().get();
-        idAtivo = ativo.getIdAtivo();
-        this.labelCondicao.setText(ativo.getCondicao());
-        this.txtItem.setText(ativo.getItem());
-        this.txtDataRetirada.setText(ativo.getDataRetirada());
-        this.txtDataRegistro.setText(ativo.getDataRegistro());
-        this.txtModelo.setText(ativo.getModelo());
-        this.txtValor.setText(String.valueOf(ativo.getValor()));
-        this.txtGarantia.setText(ativo.getGarantia());
-        this.txtNumeroSerie.setText(ativo.getNumeroSerie());
-        this.txtServiceTag.setText(ativo.getServiceTag());
-        this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
-        this.txtNotaFiscal.setText(ativo.getNotaFiscal());
-        this.txtItem.setText(ativo.getItem());
-        popularSpinnerCategorias();
-        popularSpinnerFabricantes();
-        popularSpinnerLocais();
-        popularSpinnerPisos();
+        setIdAtivo(ativo.getIdAtivo());
+        this.getLabelCondicao().setText(ativo.getCondicao());
+        this.getLabelItem().setText(ativo.getItem());
+        this.getLabelDataRetirada().setText(ativo.getDataRetirada());
+        this.getLabelDataRegistro().setText(ativo.getDataRegistro());
+        this.getLabelModelo().setText(ativo.getModelo());
+        this.getLabelValor().setText(String.valueOf(ativo.getValor()));
+        this.getLabelGarantia().setText(ativo.getGarantia());
+        this.getLabelNumeroSerie().setText(ativo.getNumeroSerie());
+        this.getLabelServiceTag().setText(ativo.getServiceTag());
+        this.getLabelPatrimonio().setText(String.valueOf(ativo.getPatrimonio()));
+        this.getLabelNotaFiscal().setText(ativo.getNotaFiscal());
+        this.getLabelItem().setText(ativo.getItem());
     }
 
     private void carregarAtivoBusca() throws ExecutionException, InterruptedException {
         ActivityBusca activityBusca = new ActivityBusca();
         Ativo ativo = activityBusca.carregarAtivo();
-        idAtivo = ativo.getIdAtivo();
-        this.labelCondicao.setText(ativo.getCondicao());
-        this.txtItem.setText(ativo.getItem());
-        this.txtDataRetirada.setText(ativo.getDataRetirada());
-        this.txtDataRegistro.setText(ativo.getDataRegistro());
-        this.txtModelo.setText(ativo.getModelo());
-        this.txtValor.setText(String.valueOf(ativo.getValor()));
-        this.txtGarantia.setText(ativo.getGarantia());
-        this.txtNumeroSerie.setText(ativo.getNumeroSerie());
-        this.txtServiceTag.setText(ativo.getServiceTag());
-        this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
-        this.txtNotaFiscal.setText(ativo.getNotaFiscal());
-        this.txtItem.setText(ativo.getItem());
-        popularSpinnerCategorias();
-        popularSpinnerFabricantes();
-        popularSpinnerLocais();
-        popularSpinnerPisos();
+        setIdAtivo(ativo.getIdAtivo());
+        this.getLabelCondicao().setText(ativo.getCondicao());
+        this.getLabelItem().setText(ativo.getItem());
+        this.getLabelDataRetirada().setText(ativo.getDataRetirada());
+        this.getLabelDataRegistro().setText(ativo.getDataRegistro());
+        this.getLabelModelo().setText(ativo.getModelo());
+        this.getLabelValor().setText(String.valueOf(ativo.getValor()));
+        this.getLabelGarantia().setText(ativo.getGarantia());
+        this.getLabelNumeroSerie().setText(ativo.getNumeroSerie());
+        this.getLabelServiceTag().setText(ativo.getServiceTag());
+        this.getLabelPatrimonio().setText(String.valueOf(ativo.getPatrimonio()));
+        this.getLabelNotaFiscal().setText(ativo.getNotaFiscal());
+        this.getLabelItem().setText(ativo.getItem());
     }
 
-    private void popularSpinnerCategorias() throws ExecutionException, InterruptedException {
-        ActivityAtivosCategoria activityAtivosCategoria = new ActivityAtivosCategoria();
-        final ArrayAdapter<Categoria> adapterSpinner = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, activityAtivosCategoria.carregarCategorias());
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategoria.setAdapter(adapterSpinner);
-        spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
-                idCategoriaSelecionada = categoria.getIdCategoria();
-                //Toast.makeText(view.getContext(), "ID: " + categoria.getIdCategoria(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+    public Integer getIdAtivo() {
+        return idAtivo;
     }
 
-    private void popularSpinnerFabricantes() throws ExecutionException, InterruptedException {
-        ActivityAtivosFabricante activityAtivosFabricante = new ActivityAtivosFabricante();
-        final ArrayAdapter<Fabricante> adapterSpinner = new ArrayAdapter<Fabricante>(this, android.R.layout.simple_spinner_item, activityAtivosFabricante.carregarFabricantes());
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFabricante.setAdapter(adapterSpinner);
-        spinnerFabricante.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
-                idFabricanteSelecionado = fabricante.getIdFabricante();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+    public void setIdAtivo(Integer idAtivo) {
+        this.idAtivo = idAtivo;
     }
 
-    private void popularSpinnerLocais() throws ExecutionException, InterruptedException {
-        ActivityAtivosLocal activityAtivosLocal = new ActivityAtivosLocal();
-        final ArrayAdapter<Local> adapterSpinner = new ArrayAdapter<Local>(this, android.R.layout.simple_spinner_item, activityAtivosLocal.carregarLocais());
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLocal.setAdapter(adapterSpinner);
-        spinnerLocal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Local local = (Local) adapterView.getItemAtPosition(i);
-                idLocalSelecionado = local.getIdLocal();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+    public TextView getLabelItem() {
+        return labelItem;
     }
 
-    private void popularSpinnerPisos() throws ExecutionException, InterruptedException {
-        APIPisos api = new APIPisos();
-        final ArrayAdapter<Piso> adapterSpinner = new ArrayAdapter<Piso>(this, android.R.layout.simple_spinner_item, api.execute().get());
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPiso.setAdapter(adapterSpinner);
-        spinnerPiso.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Piso piso = (Piso) adapterView.getItemAtPosition(i);
-                idPisoSelecionado = piso.getIdPiso();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+    public void setLabelItem(TextView labelItem) {
+        this.labelItem = labelItem;
     }
+
+    public TextView getLabelLocal() {
+        return labelLocal;
+    }
+
+    public void setLabelLocal(TextView labelLocal) {
+        this.labelLocal = labelLocal;
+    }
+
+    public TextView getLabelFabricante() {
+        return labelFabricante;
+    }
+
+    public void setLabelFabricante(TextView labelFabricante) {
+        this.labelFabricante = labelFabricante;
+    }
+
+    public TextView getLabelCategoria() {
+        return labelCategoria;
+    }
+
+    public void setLabelCategoria(TextView labelCategoria) {
+        this.labelCategoria = labelCategoria;
+    }
+
+    public TextView getLabelPiso() {
+        return labelPiso;
+    }
+
+    public void setLabelPiso(TextView labelPiso) {
+        this.labelPiso = labelPiso;
+    }
+
+    public TextView getLabelComentarios() {
+        return labelComentarios;
+    }
+
+    public void setLabelComentarios(TextView labelComentarios) {
+        this.labelComentarios = labelComentarios;
+    }
+
+    public TextView getLabelDataRetirada() {
+        return labelDataRetirada;
+    }
+
+    public void setLabelDataRetirada(TextView labelDataRetirada) {
+        this.labelDataRetirada = labelDataRetirada;
+    }
+
+    public TextView getLabelDataRegistro() {
+        return labelDataRegistro;
+    }
+
+    public void setLabelDataRegistro(TextView labelDataRegistro) {
+        this.labelDataRegistro = labelDataRegistro;
+    }
+
+    public TextView getLabelCondicao() {
+        return labelCondicao;
+    }
+
+    public void setLabelCondicao(TextView labelCondicao) {
+        this.labelCondicao = labelCondicao;
+    }
+
+    public TextView getLabelValor() {
+        return labelValor;
+    }
+
+    public void setLabelValor(TextView labelValor) {
+        this.labelValor = labelValor;
+    }
+
+    public TextView getLabelGarantia() {
+        return labelGarantia;
+    }
+
+    public void setLabelGarantia(TextView labelGarantia) {
+        this.labelGarantia = labelGarantia;
+    }
+
+    public TextView getLabelNumeroSerie() {
+        return labelNumeroSerie;
+    }
+
+    public void setLabelNumeroSerie(TextView labelNumeroSerie) {
+        this.labelNumeroSerie = labelNumeroSerie;
+    }
+
+    public TextView getLabelServiceTag() {
+        return labelServiceTag;
+    }
+
+    public void setLabelServiceTag(TextView labelServiceTag) {
+        this.labelServiceTag = labelServiceTag;
+    }
+
+    public TextView getLabelPatrimonio() {
+        return labelPatrimonio;
+    }
+
+    public void setLabelPatrimonio(TextView labelPatrimonio) {
+        this.labelPatrimonio = labelPatrimonio;
+    }
+
+    public TextView getLabelModelo() {
+        return labelModelo;
+    }
+
+    public void setLabelModelo(TextView labelModelo) {
+        this.labelModelo = labelModelo;
+    }
+
+    public TextView getLabelNotaFiscal() {
+        return labelNotaFiscal;
+    }
+
+    public void setLabelNotaFiscal(TextView labelNotaFiscal) {
+        this.labelNotaFiscal = labelNotaFiscal;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -340,8 +346,10 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.menuEditar) {
+            Intent intent = new Intent(this, ActivityEditarAtivo.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
