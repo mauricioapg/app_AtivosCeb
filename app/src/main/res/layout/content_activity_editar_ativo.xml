@@ -33,39 +33,27 @@
                 android:id="@+id/txtItem"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-
-            <TextView
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10dp"
-                android:text="Local: "/>
+                android:layout_height="10dp" />
 
             <Spinner
                 android:id="@+id/spinnerLocal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></Spinner>
 
-            <TextView
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10dp"
-                android:text="Fabricante: "/>
+                android:layout_height="15dp" />
 
             <Spinner
                 android:id="@+id/spinnerFabricante"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></Spinner>
 
-
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="5dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10dp"
-                android:text="Categoria: "/>
+                android:layout_height="15dp" />
 
             <Spinner
                 android:id="@+id/spinnerCategoria"
@@ -74,13 +62,8 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="5dp" />
+                android:layout_height="15dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="10dp"
-                android:text="Piso: "/>
             <Spinner
                 android:id="@+id/spinnerPiso"
                 android:layout_width="wrap_content"
@@ -88,7 +71,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="5dp" />
+                android:layout_height="15dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -237,6 +220,17 @@
                 android:id="@+id/txtNotaFiscal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <Button
+                android:id="@+id/btnSalvarEdicao"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:text="Salvar"
+                android:textSize="10dp"/>
 
         </LinearLayout>
 

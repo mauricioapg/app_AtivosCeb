@@ -16,26 +16,26 @@
     <Button
         android:id="@+id/btnTodosAtivos"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:text="Todos"
-        android:textSize="15dp"/>
+        android:textSize="10dp"/>
     <Button
         android:id="@+id/btnPorCategoria"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:text="Por categoria"
-        android:textSize="15dp"/>
+        android:textSize="10dp"/>
     <Button
         android:id="@+id/btnPorFabricante"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:text="Por fabricante"
-        android:textSize="15dp"/>
+        android:textSize="10dp"/>
     <Button
         android:id="@+id/btnPorLocal"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:text="Por local"
-        android:textSize="15dp"/>
+        android:textSize="10dp"/>
 
 </LinearLayout>

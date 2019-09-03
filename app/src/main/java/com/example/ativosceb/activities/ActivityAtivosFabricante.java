@@ -44,7 +44,7 @@ import java.util.concurrent.ExecutionException;
 public class ActivityAtivosFabricante extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Fabricante> listaFabricantes = new ArrayList<>();;
+    private List<String> listaFabricantes = new ArrayList<>();;
     private Spinner spinnerFabricantes;
     private ListView listViewAtivosFabricante;
     private List<Ativo> listaAtivosFabricante = new ArrayList<>();
@@ -128,11 +128,13 @@ public class ActivityAtivosFabricante extends AppCompatActivity
         }
     }
 
-    private class APIFabricante extends AsyncTask<Void, Void, List<Fabricante>>{
+    private class APIFabricante extends AsyncTask<Void, Void, List<String>>{
 
         @Override
-        protected List<Fabricante> doInBackground(Void... voids) {
+        protected List<String> doInBackground(Void... voids) {
             List<Fabricante> lista = new ArrayList<>();
+            ArrayList<String> listaGlobal = new ArrayList<String>();
+            listaGlobal.add("Selecione o fabricante...");
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
@@ -160,11 +162,12 @@ public class ActivityAtivosFabricante extends AppCompatActivity
                     JSONObject object = array.getJSONObject(i);
                     Fabricante fabricante = new Fabricante(object.optInt("idFabricante"), object.optString("descFabricante"));
                     lista.add(fabricante);
+                    listaGlobal.add(object.optString("descFabricante"));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return lista;
+            return listaGlobal;
         }
     }
 
@@ -205,21 +208,21 @@ public class ActivityAtivosFabricante extends AppCompatActivity
         });
     }
 
-    public List<Fabricante> carregarFabricantes() throws ExecutionException, InterruptedException {
+    public List<String> carregarFabricantes() throws ExecutionException, InterruptedException {
         APIFabricante api = new APIFabricante();
         listaFabricantes = api.execute().get();
         return listaFabricantes;
     }
 
     private void popularSpinner() throws ExecutionException, InterruptedException {
-        final ArrayAdapter<Fabricante> adapterSpinner = new ArrayAdapter<Fabricante>(ActivityAtivosFabricante.this, android.R.layout.simple_spinner_item, carregarFabricantes());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(ActivityAtivosFabricante.this, android.R.layout.simple_spinner_item, carregarFabricantes());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFabricantes.setAdapter(adapterSpinner);
         spinnerFabricantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
-                idFabricanteSelecionado = fabricante.getIdFabricante();
+                //Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
+                idFabricanteSelecionado = i;
             }
 
             @Override

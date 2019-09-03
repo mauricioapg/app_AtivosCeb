@@ -116,11 +116,13 @@ public class ActivityEditarAtivo extends AppCompatActivity
         }
     }
 
-    private class APIPisos extends AsyncTask<Void, Void, List<Piso>>{
+    private class APIPisos extends AsyncTask<Void, Void, List<String>>{
 
         @Override
-        protected List<Piso> doInBackground(Void... voids) {
+        protected List<String> doInBackground(Void... voids) {
             List<Piso> lista = new ArrayList<>();
+            ArrayList<String> listaGlobal = new ArrayList<String>();
+            listaGlobal.add("Selecione o piso...");
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
@@ -148,18 +150,19 @@ public class ActivityEditarAtivo extends AppCompatActivity
                     JSONObject object = array.getJSONObject(i);
                     Piso piso = new Piso(object.optInt("idPiso"), object.optString("descPiso"));
                     lista.add(piso);
+                    listaGlobal.add(object.optString("descPiso"));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return lista;
+            return listaGlobal;
         }
     }
 
     private void carregarAtivo() throws ExecutionException, InterruptedException {
         ActivityDetalhesAtivos detalhes = new ActivityDetalhesAtivos();
         Ativo ativo = detalhes.obterAtivo();
-        this.labelCondicao.setText(ativo.getCondicao());
+        //this.labelCondicao.setText(ativo.getCondicao());
         this.txtItem.setText(ativo.getItem());
         this.txtDataRetirada.setText(ativo.getDataRetirada());
         this.txtDataRegistro.setText(ativo.getDataRegistro());
@@ -178,15 +181,16 @@ public class ActivityEditarAtivo extends AppCompatActivity
 
     private void popularSpinnerCategorias() throws ExecutionException, InterruptedException {
         ActivityAtivosCategoria activityAtivosCategoria = new ActivityAtivosCategoria();
-        final ArrayAdapter<Categoria> adapterSpinner = new ArrayAdapter<Categoria>(this, android.R.layout.simple_spinner_item, activityAtivosCategoria.carregarCategorias());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, activityAtivosCategoria.carregarCategorias());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategoria.setAdapter(adapterSpinner);
         spinnerCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
-                idCategoriaSelecionada = categoria.getIdCategoria();
+                //Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
+                //idCategoriaSelecionada = categoria.getIdCategoria();
                 //Toast.makeText(view.getContext(), "ID: " + categoria.getIdCategoria(), Toast.LENGTH_LONG).show();
+                idCategoriaSelecionada = i;
             }
 
             @Override
@@ -198,14 +202,15 @@ public class ActivityEditarAtivo extends AppCompatActivity
 
     private void popularSpinnerFabricantes() throws ExecutionException, InterruptedException {
         ActivityAtivosFabricante activityAtivosFabricante = new ActivityAtivosFabricante();
-        final ArrayAdapter<Fabricante> adapterSpinner = new ArrayAdapter<Fabricante>(this, android.R.layout.simple_spinner_item, activityAtivosFabricante.carregarFabricantes());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, activityAtivosFabricante.carregarFabricantes());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFabricante.setAdapter(adapterSpinner);
         spinnerFabricante.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
-                idFabricanteSelecionado = fabricante.getIdFabricante();
+                //Fabricante fabricante = (Fabricante) adapterView.getItemAtPosition(i);
+                //idFabricanteSelecionado = fabricante.getIdFabricante();
+                idFabricanteSelecionado = i;
             }
 
             @Override
@@ -217,14 +222,15 @@ public class ActivityEditarAtivo extends AppCompatActivity
 
     private void popularSpinnerLocais() throws ExecutionException, InterruptedException {
         ActivityAtivosLocal activityAtivosLocal = new ActivityAtivosLocal();
-        final ArrayAdapter<Local> adapterSpinner = new ArrayAdapter<Local>(this, android.R.layout.simple_spinner_item, activityAtivosLocal.carregarLocais());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, activityAtivosLocal.carregarLocais());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocal.setAdapter(adapterSpinner);
         spinnerLocal.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Local local = (Local) adapterView.getItemAtPosition(i);
-                idLocalSelecionado = local.getIdLocal();
+                //Local local = (Local) adapterView.getItemAtPosition(i);
+                //idLocalSelecionado = local.getIdLocal();
+                idLocalSelecionado = i;
             }
 
             @Override
@@ -236,14 +242,15 @@ public class ActivityEditarAtivo extends AppCompatActivity
 
     private void popularSpinnerPisos() throws ExecutionException, InterruptedException {
         ActivityEditarAtivo.APIPisos api = new ActivityEditarAtivo.APIPisos();
-        final ArrayAdapter<Piso> adapterSpinner = new ArrayAdapter<Piso>(this, android.R.layout.simple_spinner_item, api.execute().get());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, api.execute().get());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPiso.setAdapter(adapterSpinner);
         spinnerPiso.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Piso piso = (Piso) adapterView.getItemAtPosition(i);
-                idPisoSelecionado = piso.getIdPiso();
+                //Piso piso = (Piso) adapterView.getItemAtPosition(i);
+                //idPisoSelecionado = piso.getIdPiso();
+                idPisoSelecionado = i;
             }
 
             @Override

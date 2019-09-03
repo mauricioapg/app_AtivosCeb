@@ -44,7 +44,7 @@ import java.util.concurrent.ExecutionException;
 public class ActivityAtivosLocal extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Local> listaLocais = new ArrayList<>();;
+    private List<String> listaLocais = new ArrayList<>();;
     private Spinner spinnerLocais;
     private ListView listViewAtivosLocal;
     private List<Ativo> listaAtivosLocal = new ArrayList<>();
@@ -128,11 +128,13 @@ public class ActivityAtivosLocal extends AppCompatActivity
         }
     }
 
-    private class APILocal extends AsyncTask<Void, Void, List<Local>>{
+    private class APILocal extends AsyncTask<Void, Void, List<String>>{
 
         @Override
-        protected List<Local> doInBackground(Void... voids) {
+        protected List<String> doInBackground(Void... voids) {
             List<Local> lista = new ArrayList<>();
+            ArrayList<String> listaGlobal = new ArrayList<String>();
+            listaGlobal.add("Selecione o local...");
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
@@ -160,11 +162,12 @@ public class ActivityAtivosLocal extends AppCompatActivity
                     JSONObject object = array.getJSONObject(i);
                     Local local = new Local(object.optInt("idLocal"), object.optString("descLocal"));
                     lista.add(local);
+                    listaGlobal.add(object.optString("descLocal"));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return lista;
+            return listaGlobal;
         }
     }
 
@@ -205,21 +208,22 @@ public class ActivityAtivosLocal extends AppCompatActivity
         });
     }
 
-    public List<Local> carregarLocais() throws ExecutionException, InterruptedException {
+    public List<String> carregarLocais() throws ExecutionException, InterruptedException {
         APILocal api = new APILocal();
         listaLocais = api.execute().get();
         return listaLocais;
     }
 
     private void popularSpinner() throws ExecutionException, InterruptedException {
-        final ArrayAdapter<Local> adapterSpinner = new ArrayAdapter<Local>(ActivityAtivosLocal.this, android.R.layout.simple_spinner_item, carregarLocais());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(ActivityAtivosLocal.this, android.R.layout.simple_spinner_item, carregarLocais());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocais.setAdapter(adapterSpinner);
         spinnerLocais.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Local local = (Local) adapterView.getItemAtPosition(i);
-                idLocalSelecionado = local.getIdLocal();
+                //Local local = (Local) adapterView.getItemAtPosition(i);
+                //idLocalSelecionado = local.getIdLocal();
+                idLocalSelecionado = i;
             }
 
             @Override

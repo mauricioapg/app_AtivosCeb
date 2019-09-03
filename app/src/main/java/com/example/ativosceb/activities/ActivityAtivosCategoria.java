@@ -47,7 +47,7 @@ import java.util.concurrent.ExecutionException;
 public class ActivityAtivosCategoria extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<Categoria> listaCategorias = new ArrayList<>();;
+    private List<String> listaCategorias = new ArrayList<>();;
     private Spinner spinnerCategorias;
     private ListView listViewAtivosCategoria;
     private List<Ativo> listaAtivosCategoria = new ArrayList<>();
@@ -131,11 +131,13 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         }
     }
 
-    private class APICategoria extends AsyncTask<Void, Void, List<Categoria>>{
+    private class APICategoria extends AsyncTask<Void, Void, List<String>>{
 
         @Override
-        protected List<Categoria> doInBackground(Void... voids) {
+        protected List<String> doInBackground(Void... voids) {
             List<Categoria> lista = new ArrayList<>();
+            ArrayList<String> listaGlobal = new ArrayList<String>();
+            listaGlobal.add("Selecione a categoria...");
             HttpURLConnection urlConnection = null;
             StringBuilder resposta = new StringBuilder();
             try {
@@ -163,11 +165,12 @@ public class ActivityAtivosCategoria extends AppCompatActivity
                     JSONObject object = array.getJSONObject(i);
                     Categoria categoria = new Categoria(object.optInt("idCategoria"), object.optString("descCategoria"));
                     lista.add(categoria);
+                    listaGlobal.add(object.optString("descCategoria"));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return lista;
+            return listaGlobal;
         }
     }
 
@@ -208,22 +211,23 @@ public class ActivityAtivosCategoria extends AppCompatActivity
         });
     }
 
-    public List<Categoria> carregarCategorias() throws ExecutionException, InterruptedException {
+    public List<String> carregarCategorias() throws ExecutionException, InterruptedException {
         APICategoria api = new APICategoria();
         listaCategorias = api.execute().get();
         return listaCategorias;
     }
 
     private void popularSpinner() throws ExecutionException, InterruptedException {
-        final ArrayAdapter<Categoria> adapterSpinner = new ArrayAdapter<Categoria>(ActivityAtivosCategoria.this, android.R.layout.simple_spinner_item, carregarCategorias());
+        final ArrayAdapter<String> adapterSpinner = new ArrayAdapter<String>(ActivityAtivosCategoria.this, android.R.layout.simple_spinner_item, carregarCategorias());
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategorias.setAdapter(adapterSpinner);
         spinnerCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
-                idCategoriaSelecionada = categoria.getIdCategoria();
-                //Toast.makeText(view.getContext(), "ID: " + categoria.getIdCategoria(), Toast.LENGTH_LONG).show();
+                //Categoria categoria = (Categoria) adapterView.getItemAtPosition(i);
+                //idCategoriaSelecionada = categoria.getIdCategoria();
+                idCategoriaSelecionada = i;
+                //Toast.makeText(view.getContext(), "ID: " + idCategoriaSelecionada, Toast.LENGTH_LONG).show();
             }
 
             @Override

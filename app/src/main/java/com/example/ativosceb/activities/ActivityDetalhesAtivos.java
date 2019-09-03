@@ -21,11 +21,21 @@ import android.widget.TextView;
 
 import com.example.ativosceb.R;
 import com.example.ativosceb.model.Ativo;
+import com.example.ativosceb.model.Categoria;
+import com.example.ativosceb.model.Fabricante;
+import com.example.ativosceb.model.Local;
+import com.example.ativosceb.model.Piso;
 import com.example.ativosceb.service.APIAtivosCEB;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -113,6 +123,122 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
+    private class APIDescricaoCategoria extends  AsyncTask<Void, Void, Categoria>{
+
+        @Override
+        protected Categoria doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "categoria/" + idCategoriaSelecionada);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(resposta.toString(), Categoria.class);
+        }
+    }
+
+    private class APIDescricaoFabricante extends  AsyncTask<Void, Void, Fabricante>{
+
+        @Override
+        protected Fabricante doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "fabricante/" + idFabricanteSelecionado);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(resposta.toString(), Fabricante.class);
+        }
+    }
+
+    private class APIDescricaoLocal extends  AsyncTask<Void, Void, Local>{
+
+        @Override
+        protected Local doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "local/" + idLocalSelecionado);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(resposta.toString(), Local.class);
+        }
+    }
+
+    private class APIDescricaoPiso extends  AsyncTask<Void, Void, Piso>{
+
+        @Override
+        protected Piso doInBackground(Void... voids) {
+            HttpURLConnection urlConnection = null;
+            StringBuilder resposta = new StringBuilder();
+            try {
+                URL url = new URL(APIAtivosCEB.urlPadrao + "piso/" + idPisoSelecionado);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.connect();
+
+                Scanner scanner = new Scanner(url.openStream());
+                while ((scanner.hasNext())) {
+                    resposta.append(scanner.next() + " ");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+            }
+            Gson gson = new Gson();
+            return gson.fromJson(resposta.toString(), Piso.class);
+        }
+    }
+
     private class APIAtivoObtido extends AsyncTask<Void, Void, Ativo>{
 
         @Override
@@ -143,9 +269,34 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
     }
 
     public Ativo obterAtivo() throws ExecutionException, InterruptedException {
-        APIAtivoObtido api = new APIAtivoObtido();
-        Ativo ativo = api.execute().get();
+        Ativo ativo = null;
+        if(telaOrigem == "telaLista"){
+            APIAtivoObtido apiLista = new APIAtivoObtido();
+            ativo = apiLista.execute().get();
+        }
+        else if(telaOrigem == "telaBusca"){
+            ActivityBusca activityBusca = new ActivityBusca();
+            ativo = activityBusca.carregarAtivo();
+        }
         return ativo;
+    }
+
+    private void obterDescricoes() throws ExecutionException, InterruptedException {
+        APIDescricaoCategoria apiDescCategoria = new APIDescricaoCategoria();
+        Categoria categoria = apiDescCategoria.execute().get();
+        this.getLabelCategoria().setText(categoria.getDescCategoria());
+
+        APIDescricaoFabricante apiDescFabricante = new APIDescricaoFabricante();
+        Fabricante fabricante = apiDescFabricante.execute().get();
+        this.getLabelFabricante().setText(fabricante.getDescFabricante());
+
+        APIDescricaoLocal apiDescLocal = new APIDescricaoLocal();
+        Local local = apiDescLocal.execute().get();
+        this.getLabelLocal().setText(local.getDescLocal());
+
+        APIDescricaoPiso apiDescPiso = new APIDescricaoPiso();
+        Piso piso = apiDescPiso.execute().get();
+        this.getLabelPiso().setText(piso.getDescPiso());
     }
     
     private void carregarAtivoLista() throws ExecutionException, InterruptedException {
@@ -164,6 +315,11 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         this.getLabelPatrimonio().setText(String.valueOf(ativo.getPatrimonio()));
         this.getLabelNotaFiscal().setText(ativo.getNotaFiscal());
         this.getLabelItem().setText(ativo.getItem());
+        this.idCategoriaSelecionada = ativo.getIdCategoria();
+        this.idFabricanteSelecionado = ativo.getIdFabricante();
+        this.idLocalSelecionado = ativo.getIdLocal();
+        this.idPisoSelecionado = ativo.getIdPiso();
+        obterDescricoes();
     }
 
     private void carregarAtivoBusca() throws ExecutionException, InterruptedException {
@@ -182,6 +338,11 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         this.getLabelPatrimonio().setText(String.valueOf(ativo.getPatrimonio()));
         this.getLabelNotaFiscal().setText(ativo.getNotaFiscal());
         this.getLabelItem().setText(ativo.getItem());
+        this.idCategoriaSelecionada = ativo.getIdCategoria();
+        this.idFabricanteSelecionado = ativo.getIdFabricante();
+        this.idLocalSelecionado = ativo.getIdLocal();
+        this.idPisoSelecionado = ativo.getIdPiso();
+        obterDescricoes();
     }
 
     public Integer getIdAtivo() {
