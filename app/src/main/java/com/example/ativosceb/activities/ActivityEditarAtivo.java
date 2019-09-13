@@ -62,6 +62,10 @@ public class ActivityEditarAtivo extends AppCompatActivity
     private EditText txtPatrimonio;
     private EditText txtModelo;
     private EditText txtNotaFiscal;
+    private TextView labelLocalAtual;
+    private TextView labelFabricanteAtual;
+    private TextView labelCategoriaAtual;
+    private TextView labelPisoAtual;
     private Integer idCategoriaSelecionada;
     private Integer idFabricanteSelecionado;
     private Integer idLocalSelecionado;
@@ -104,6 +108,10 @@ public class ActivityEditarAtivo extends AppCompatActivity
         this.spinnerFabricante = (Spinner) findViewById(R.id.spinnerFabricante);
         this.spinnerLocal = (Spinner) findViewById(R.id.spinnerLocal);
         this.spinnerPiso = (Spinner) findViewById(R.id.spinnerPiso);
+        this.labelCategoriaAtual = (TextView) findViewById(R.id.labelCategoriaAtual);
+        this.labelFabricanteAtual = (TextView) findViewById(R.id.labelFabricanteAtual);
+        this.labelLocalAtual = (TextView) findViewById(R.id.labelLocalAtual);
+        this.labelPisoAtual = (TextView) findViewById(R.id.labelPisoAtual);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -162,7 +170,7 @@ public class ActivityEditarAtivo extends AppCompatActivity
     private void carregarAtivo() throws ExecutionException, InterruptedException {
         ActivityDetalhesAtivos detalhes = new ActivityDetalhesAtivos();
         Ativo ativo = detalhes.obterAtivo();
-        //this.labelCondicao.setText(ativo.getCondicao());
+        this.labelCondicao.setText(ativo.getCondicao());
         this.txtItem.setText(ativo.getItem());
         this.txtDataRetirada.setText(ativo.getDataRetirada());
         this.txtDataRegistro.setText(ativo.getDataRegistro());
@@ -173,6 +181,10 @@ public class ActivityEditarAtivo extends AppCompatActivity
         this.txtServiceTag.setText(ativo.getServiceTag());
         this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
         this.txtNotaFiscal.setText(ativo.getNotaFiscal());
+        //this.labelPisoAtual.setText(ActivityDetalhesAtivos.);
+        //this.labelLocalAtual.setText(detalhes.getLabelLocal().toString());
+        //this.labelFabricanteAtual.setText(detalhes.getLabelLocal().toString());
+        //this.labelCategoriaAtual.setText(detalhes.getLabelCategoria().toString());
         popularSpinnerCategorias();
         popularSpinnerFabricantes();
         popularSpinnerLocais();

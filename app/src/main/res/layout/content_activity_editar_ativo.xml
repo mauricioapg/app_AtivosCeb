@@ -35,7 +35,7 @@
                 android:layout_height="match_parent" />
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="15dp" />
 
             <Spinner
                 android:id="@+id/spinnerLocal"
@@ -44,7 +44,18 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/labelLocalAtual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="8dp"
+                android:text="Local atual "/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
             <Spinner
                 android:id="@+id/spinnerFabricante"
@@ -53,7 +64,18 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/labelFabricanteAtual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="8dp"
+                android:text="Fabricante atual "/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
             <Spinner
                 android:id="@+id/spinnerCategoria"
@@ -62,12 +84,34 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp" />
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/labelCategoriaAtual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="8dp"
+                android:text="Categoria atual "/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
 
             <Spinner
                 android:id="@+id/spinnerPiso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></Spinner>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <TextView
+                android:id="@+id/labelPisoAtual"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="8dp"
+                android:text="Piso atual "/>
 
             <Space
                 android:layout_width="match_parent"

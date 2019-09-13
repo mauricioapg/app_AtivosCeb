@@ -60,10 +60,10 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
     private TextView labelModelo;
     private TextView labelNotaFiscal;
     private MenuItem menuEditar;
-    private Integer idCategoriaSelecionada;
-    private Integer idFabricanteSelecionado;
-    private Integer idLocalSelecionado;
-    private Integer idPisoSelecionado;
+    private static Integer idCategoriaSelecionada;
+    private static Integer idFabricanteSelecionado;
+    private static Integer idLocalSelecionado;
+    private static Integer idPisoSelecionado;
     public static int idAtivoClicadoLista;
     public static String telaOrigem;
 
@@ -123,7 +123,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
-    private class APIDescricaoCategoria extends  AsyncTask<Void, Void, Categoria>{
+    private static class APIDescricaoCategoria extends  AsyncTask<Void, Void, Categoria>{
 
         @Override
         protected Categoria doInBackground(Void... voids) {
@@ -152,7 +152,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
-    private class APIDescricaoFabricante extends  AsyncTask<Void, Void, Fabricante>{
+    private static class APIDescricaoFabricante extends  AsyncTask<Void, Void, Fabricante>{
 
         @Override
         protected Fabricante doInBackground(Void... voids) {
@@ -181,7 +181,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
-    private class APIDescricaoLocal extends  AsyncTask<Void, Void, Local>{
+    private static class APIDescricaoLocal extends  AsyncTask<Void, Void, Local>{
 
         @Override
         protected Local doInBackground(Void... voids) {
@@ -210,7 +210,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         }
     }
 
-    private class APIDescricaoPiso extends  AsyncTask<Void, Void, Piso>{
+    private static class APIDescricaoPiso extends  AsyncTask<Void, Void, Piso>{
 
         @Override
         protected Piso doInBackground(Void... voids) {
@@ -281,7 +281,7 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         return ativo;
     }
 
-    private void obterDescricoes() throws ExecutionException, InterruptedException {
+    public void obterDescricoes() throws ExecutionException, InterruptedException {
         APIDescricaoCategoria apiDescCategoria = new APIDescricaoCategoria();
         Categoria categoria = apiDescCategoria.execute().get();
         this.getLabelCategoria().setText(categoria.getDescCategoria());

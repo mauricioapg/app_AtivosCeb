@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class APIAtivosCEB{
 
-    public static String urlPadrao = "http://webativos.gearhostpreview.com/api/";
+    public static String urlPadrao = "http://192.168.0.160/ativos/api/";
 
 /*public Ativo buscarAtivo() throws JSONException, IOException, ExecutionException, InterruptedException {
         String resposta = this.execute().get();
