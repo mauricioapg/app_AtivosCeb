@@ -66,6 +66,10 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
     private static Integer idPisoSelecionado;
     public static int idAtivoClicadoLista;
     public static String telaOrigem;
+    public static String descricaoCategoria;
+    public static String descricaoFabricante;
+    public static String descricaoLocal;
+    public static String descricaoPiso;
 
 
     @Override
@@ -285,18 +289,22 @@ public class ActivityDetalhesAtivos extends AppCompatActivity
         APIDescricaoCategoria apiDescCategoria = new APIDescricaoCategoria();
         Categoria categoria = apiDescCategoria.execute().get();
         this.getLabelCategoria().setText(categoria.getDescCategoria());
+        descricaoCategoria = categoria.getDescCategoria();
 
         APIDescricaoFabricante apiDescFabricante = new APIDescricaoFabricante();
         Fabricante fabricante = apiDescFabricante.execute().get();
         this.getLabelFabricante().setText(fabricante.getDescFabricante());
+        descricaoFabricante = fabricante.getDescFabricante();
 
         APIDescricaoLocal apiDescLocal = new APIDescricaoLocal();
         Local local = apiDescLocal.execute().get();
         this.getLabelLocal().setText(local.getDescLocal());
+        descricaoLocal = local.getDescLocal();
 
         APIDescricaoPiso apiDescPiso = new APIDescricaoPiso();
         Piso piso = apiDescPiso.execute().get();
         this.getLabelPiso().setText(piso.getDescPiso());
+        descricaoPiso = piso.getDescPiso();
     }
     
     private void carregarAtivoLista() throws ExecutionException, InterruptedException {

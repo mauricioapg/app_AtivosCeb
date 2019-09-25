@@ -113,7 +113,7 @@ public class ActivityEditarAtivo extends AppCompatActivity
         this.labelLocalAtual = (TextView) findViewById(R.id.labelLocalAtual);
         this.labelPisoAtual = (TextView) findViewById(R.id.labelPisoAtual);
 
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //não abrir teclado automaticamente
 
         try {
             carregarAtivo();
@@ -181,10 +181,10 @@ public class ActivityEditarAtivo extends AppCompatActivity
         this.txtServiceTag.setText(ativo.getServiceTag());
         this.txtPatrimonio.setText(String.valueOf(ativo.getPatrimonio()));
         this.txtNotaFiscal.setText(ativo.getNotaFiscal());
-        //this.labelPisoAtual.setText(ActivityDetalhesAtivos.);
-        //this.labelLocalAtual.setText(detalhes.getLabelLocal().toString());
-        //this.labelFabricanteAtual.setText(detalhes.getLabelLocal().toString());
-        //this.labelCategoriaAtual.setText(detalhes.getLabelCategoria().toString());
+        this.labelPisoAtual.setText("Piso atual: " + ActivityDetalhesAtivos.descricaoPiso);
+        this.labelLocalAtual.setText("Local atual: " + ActivityDetalhesAtivos.descricaoLocal);
+        this.labelFabricanteAtual.setText("Fabricante atual: " + ActivityDetalhesAtivos.descricaoFabricante);
+        this.labelCategoriaAtual.setText("Categoria atual: " + ActivityDetalhesAtivos.descricaoCategoria);
         popularSpinnerCategorias();
         popularSpinnerFabricantes();
         popularSpinnerLocais();
